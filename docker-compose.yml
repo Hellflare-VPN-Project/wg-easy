@@ -22,7 +22,8 @@ services:
       # - WG_PRE_DOWN=echo "Pre Down" > /etc/wireguard/pre-down.txt
       # - WG_POST_DOWN=echo "Post Down" > /etc/wireguard/post-down.txt
       
-    image: ghcr.io/wg-easy/wg-easy
+    build: .
+    image: wg-easy-custom:latest
     container_name: wg-easy
     volumes:
       - .:/etc/wireguard
