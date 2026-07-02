@@ -12,9 +12,9 @@ services:
       - WG_DEFAULT_ADDRESS=10.8.0.x
 
       # Optional:
-      # - PASSWORD=foobar123
+      - PASSWORD=ЗАМЕНИ_НА_СВОЙ_ПАРОЛЬ
       # - WG_PORT=51820
-      # - WG_DEFAULT_DNS=1.1.1.1
+      - WG_DEFAULT_DNS=1.1.1.1
       # - WG_MTU=1420
       # - WG_ALLOWED_IPS=192.168.15.0/24, 10.0.1.0/24
       # - WG_PRE_UP=echo "Pre Up" > /etc/wireguard/pre-up.txt
@@ -28,7 +28,6 @@ services:
       - .:/etc/wireguard
     ports:
       - "51820:51820/udp"
-      - "51821:51821/tcp"
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
@@ -36,3 +35,18 @@ services:
     sysctls:
       - net.ipv4.ip_forward=1
       - net.ipv4.conf.all.src_valid_mark=1
+
+  nginx:
+    build: ./nginx
+    container_name: wg-easy-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - nginx_certs:/etc/nginx/certs
+    depends_on:
+      - wg-easy
+
+volumes:
+  nginx_certs:
